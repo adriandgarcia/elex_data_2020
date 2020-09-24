@@ -1,0 +1,186 @@
+---
+title: "election_data"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+author: "Adrian D. Garcia"
+date: "September 2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+# Intro
+
+## Getting Started
+
+```{r setup, message = FALSE, warning = FALSE}
+
+library(tidyverse) #For Data Analysis
+library(lubridate) #For working with dates
+library(DT) #For visualizing tables
+
+```
+
+I've downloaded individual contributions for the CEOs of the 15 largest fund shops using the FEC [websites](https://www.fec.gov/data/receipts/individual-contributions). The files were saved individually in the *indiv_09082020* folder. They were comvined used **Combine.r**.
+
+```{r load, message = FALSE}
+
+Data <- read_csv("FEC_08_to_20.csv")
+
+```
+
+TK
+
+```{r load, message = FALSE}
+
+Adj_Data <- Data %>%
+  mutate(
+    CEO =
+      case_when(
+        name %in% c(
+          "abigail johnson",
+          "dana emery",
+          "david butler",
+          "gerard oreilly",
+          "jennifer johnson",
+          "laurence fink",
+          "martin flanagan",
+          "mary callahan erdoes",
+          "matt oconnor",
+          "michael falcon",
+          "michael roberge",
+          "mortimer buckley",
+          "roger ferguson",
+          "tim armour",
+          "william stromberg",
+          "william truscott"
+        ) ~ "CEO",
+        TRUE ~ "Spouse"
+      ),
+    COMPANY =
+      case_when(
+        grepl("AMERICAN FUNDS", contributor_employer) ~ "Capital Group/American Funds",
+        grepl("AMERIPRISE", contributor_employer) ~ "Columbia Threadneedle",
+        grepl("AMVESCAP PLC", contributor_employer) ~ "Invesco",
+        grepl("INVESCO", contributor_employer) ~ "Invesco",
+        grepl("BLACKROCK", contributor_employer) ~ "BlackRock",
+        grepl("CAPITAL GROUP", contributor_employer) ~ "Capital Group/American Funds",
+        grepl("CAPITAL RESEARCH", contributor_employer) ~ "Capital Group/American Funds",
+        grepl("COLUMBIA", contributor_employer) ~ "Columbia Threadneedle",
+        grepl("DIMENSIONAL FUND", contributor_employer) ~ "Dimensional Funds",
+        grepl("FIDELITY", contributor_employer) ~ "Fidelity",
+        grepl("FMR LLC", contributor_employer) ~ "Fidelity",
+        grepl("FRANKLIN", contributor_employer) ~ "Franklin",
+        grepl("JACKSON NATIONAL", contributor_employer) ~ "Jackson National",
+        grepl("JPMORGAN", contributor_employer) ~ "JPMorgan",
+        grepl("M.F.S.", contributor_employer) ~ "MFS",
+        grepl("MFS", contributor_employer) ~ "MFS",
+        grepl("PRUDENTIAL PLC", contributor_employer) ~ "Jackson National",
+        grepl("ROWE PRICE", contributor_employer) ~ "T Rowe Price",
+        grepl("TIAA", contributor_employer) ~ "TIAA",
+        grepl("VANGUARD", contributor_employer) ~ "Vanguard",
+        TRUE ~ contributor_employer
+      )
+  )
+
+```
+
+TK
+
+```{r pressure, echo=FALSE}
+
+Adj_Data %>%  
+  filter(CEO == "CEO") %>% 
+  group_by(name, COMPANY, contributor_employer) %>% 
+  summarise() %>% 
+  datatable()
+
+```
+
+TK
+
+```{r pressure, echo=FALSE}
+
+Adj_Data %>%  
+  filter(CEO == "CEO" &
+           two_year_transaction_period == "2020") %>% 
+  group_by(name, committee_type) %>% 
+  summarise(Sum_Contributions = sum(contribution_receipt_amount)) %>% 
+  ggplot(data = ., mapping = aes(x = name, y = Sum_Contributions, fill = committee_type)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 35000)) +
+  ggtitle("Contributions During 2020 CYCLE") +
+  ylab("2019-2020 Contributions") +
+  xlab("CEOs") +
+  theme_classic() +
+  theme(plot.title = element_text(size = 11, face = "bold"))
+
+```
+
+TK
+
+```{r pressure, echo=FALSE}
+
+Adj_Data %>%  
+  filter(CEO == "CEO") %>% 
+  group_by(name, committee_type, two_year_transaction_period) %>% 
+  summarise(Sum_Contributions = sum(contribution_receipt_amount)) %>% 
+  ggplot(data = ., mapping = aes(x = two_year_transaction_period, y = Sum_Contributions, fill = committee_type)) +
+  geom_bar(stat = "identity", position = "stack") +
+  facet_wrap(~name) +
+  scale_y_continuous(limits = c(0, 35000)) +
+  ggtitle("Contributions During 2020 CYCLE") +
+  ylab("2019-2020 Contributions") +
+  xlab("CEOs") +
+  theme_classic() +
+  theme(plot.title = element_text(size = 11, face = "bold"))
+
+```
+
+TK
+
+```{r pressure, echo=FALSE}
+
+importio <- read_csv("importio_091520.csv",
+              guess_max = 6000)
+
+House <- importio %>% 
+  select(1:9,18)%>% 
+  mutate(Label = "House") %>% 
+  rename("Politician" = House,
+         "Politician Total" = `House Total`)
+
+Senate <- importio %>% 
+  select(1:7,10:11,18) %>% 
+  filter(!is.na(Senate))%>% 
+  mutate(Label = "Senate") %>% 
+  rename("Politician" = Senate,
+         "Politician Total" = `Senate Total`)
+
+Presidential <- importio %>% 
+  select(1:7,12:13,18) %>% 
+  filter(!is.na(Presidential)) %>% 
+  mutate(Label = "Presidential") %>% 
+  rename("Politician" = `Presidential`,
+         "Politician Total" = `Presidential Total`)
+
+opensecrets <- full_join(House, Senate) %>% 
+  full_join(., Presidential) %>% 
+  select("year" = url2,
+         "id" = url3,
+         "Name" = Name1,
+         "Label" = Label,
+         Politician,
+         `Politician Total`
+         ) %>% 
+  filter(!is.na(Politician) & !is.na(`Politician Total`))
+
+write_csv(opensecrets, "opensecrets.csv")
+
+
+```
