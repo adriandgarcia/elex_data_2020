@@ -248,3 +248,5 @@ FEC_PAC_08_to_20 <- full_join(FEC_20, FEC_18) %>%
   full_join(., FEC_08)
 
 write_csv(FEC_PAC_08_to_20, "FEC_PAC_08_to_20.csv")
+
+rm(list = ls())

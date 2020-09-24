@@ -1,6 +1,8 @@
 library(tidyverse)
 
-FEC_Data <- read_csv("FEC/CEO_FEC_09082020.csv")
+#Need to run combine_files.r first.
+
+FEC_Data <- read_csv("FEC/CEO_FEC_09242020.csv")
 
 
 Coms_20 <- read_csv("FEC/com_20.csv")
@@ -24,7 +26,7 @@ FEC_20 <- FEC_Data %>% filter(two_year_transaction_period == "2020") %>%
              committee_name == "AMERICAN COUNCIL OF LIFE INSURERS POLITICAL ACTION COMMITTEE" ~ "American Council of Life Insurers Pac",
              committee_name == "MOONEY VICTORY FUND" ~ "REP", 
              committee_name == "SCALISE LEADERSHIP FUND" ~ "REP",
-             committee_name == "BIDEN VICTORY FUND" ~ "Dem",
+             committee_name == "BIDEN VICTORY FUND" ~ "DEM",
              committee_name == "JACKSON HOLDINGS LLC AND JACKSON NATIONAL LIFE INSURANCE COMPANY FEDERAL SSF (JACKSON NATIONAL FEDERAL PAC)" ~ "Company Pac",
              committee_name == "JPMORGAN CHASE & CO. FEDERAL POLITICAL ACTION COMMITTEE" ~ "Company Pac",
              committee_name == "PORTMAN FOR SENATE COMMITTEE" ~ "REP",
@@ -248,6 +250,7 @@ FEC_10 <- FEC_Data %>% filter(two_year_transaction_period == "2010") %>%
              committee_name == "FMR LLC POLITICAL ACTION COMMITTEE (FIDELITY PAC)" ~ "Company Pac",
              committee_name == "JPMORGAN CHASE & CO. PAC" ~ "Company Pac",
              committee_name == "THE VANGUARD GROUP COMMITTEE FOR RESPONSIBLE GOVERNMENT (VANGUARD COMMITTEE FOR RESPONSIBL" ~ "Company Pac",
+             committee_name == "LINCOLN CLUB OF NORTHERN CALIFORNIA FEDERAL PAC" ~ "REP",
              TRUE ~ as.character(CMTE_PTY_AFFILIATION)
            ))
 
@@ -317,4 +320,4 @@ FEC_08_to_20 <- full_join(FEC_20, FEC_18) %>%
   full_join(., FEC_10) %>% 
   full_join(., FEC_08)
 
-write_csv(FEC_08_to_20, "FEC/FEC_08_to_20.csv")
+write_csv(FEC_08_to_20, "FEC/CEO_FEC_09242020.csv")

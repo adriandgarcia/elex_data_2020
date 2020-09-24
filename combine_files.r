@@ -218,7 +218,9 @@ CEO_FEC_09082020 <- full_join(abigail_johnson, annette_nazareth) %>%
   full_join(., william_truscott)
 
 
-write_csv(CEO_FEC_09082020, "FEC/CEO_FEC_09082020.csv")
+write_csv(CEO_FEC_09082020, "FEC/CEO_FEC_09242020.csv")
+
+#run working.r after this.
 
 com_hed <- colnames(read_csv("FEC/cm_091020/cm_header_file.csv"))
 com_20<- read_delim("FEC/cm_091020/cm_20.txt", delim = "|", col_names = com_hed)
