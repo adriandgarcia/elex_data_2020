@@ -25,11 +25,13 @@ library(DT) #For visualizing tables
 
 ```
 
-I've downloaded individual contributions for the CEOs of the 15 largest fund shops using the FEC [websites](https://www.fec.gov/data/receipts/individual-contributions). The files were saved individually in the *indiv_09082020* folder. They were comvined used **Combine.r**.
+I've downloaded individual contributions for the CEOs of the 15 largest fund shops using the FEC [websites](https://www.fec.gov/data/receipts/individual-contributions). The files were saved individually in the *indiv_09082020* folder. They were combined used **Combine.r**.
+
+The data was pulled Sept. 8.
 
 ```{r load, message = FALSE}
 
-Data <- read_csv("FEC_08_to_20.csv")
+Data <- read_csv("FEC/CEO_FEC_09082020.csv")
 
 ```
 
