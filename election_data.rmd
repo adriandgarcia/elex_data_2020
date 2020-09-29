@@ -49,12 +49,12 @@ Adj_Data <- Data %>%
           "abigail johnson",
           "dana emery",
           "david butler",
+          "douglas sieg",
           "gerard oreilly",
           "jennifer johnson",
           "laurence fink",
           "martin flanagan",
           "mary callahan erdoes",
-          "matt oconnor",
           "michael falcon",
           "michael roberge",
           "mortimer buckley",
@@ -81,6 +81,7 @@ Adj_Data <- Data %>%
         grepl("FRANKLIN", contributor_employer) ~ "Franklin",
         grepl("JACKSON NATIONAL", contributor_employer) ~ "Jackson National",
         grepl("JPMORGAN", contributor_employer) ~ "JPMorgan",
+        grepl("Abb[oe]tt", contributor_employer, ignore.case = TRUE) ~ "Lord Abbett",
         grepl("M.F.S.", contributor_employer) ~ "MFS",
         grepl("MFS", contributor_employer) ~ "MFS",
         grepl("PRUDENTIAL PLC", contributor_employer) ~ "Jackson National",
@@ -168,7 +169,7 @@ Indiv_Sum_2020 <- Adj_Data %>%
 
 Historical
 
-```{r , echo=FALSE}
+```{r historical, echo=FALSE}
 
 Couple_Breakdown <- Adj_Data %>%
   select(
@@ -228,4 +229,87 @@ Spread <- Couple_Breakdown %>%
   theme(plot.title = element_text(size = 11, face = "bold"))
 
 ```
+TK
 
+```{r TK, message=FALSE}
+
+a <- Adj_Data %>%
+  select(
+    name,
+    spouse,
+    CEO,
+    committee_name,
+    committee_type,
+    two_year_transaction_period,
+    contribution_receipt_amount
+  ) %>%
+  mutate(
+    committee_types =
+      case_when(
+        committee_type == "REP" ~ "REP",
+        committee_type == "DEM" ~ "DEM",
+        committee_type == "Company Pac" ~ "Company Pac",
+        committee_type == "ICI Pac" ~ "ICI Pac",
+        TRUE ~ "Other"
+      ),
+    Couple =
+      case_when(
+        CEO == "CEO" ~ name,
+        TRUE ~ spouse
+        ),
+    Order =
+      case_when(
+        committee_types == "REP" ~ 1,
+        committee_types == "DEM" ~ 2,
+        committee_types == "Company Pac" ~ 3,
+        committee_types == "ICI Pac" ~ 4,
+        committee_types == "Other" ~ 5
+      )) %>%
+  # group_by(Couple, committee_type, committee_types, Order, two_year_transaction_period) %>%
+  # summarise(TOTAL = sum(contribution_receipt_amount)) %>%
+  filter(two_year_transaction_period != "2020")
+
+
+
+b <- Adj_Data %>% 
+  mutate(
+    committee_types =
+      case_when(
+        committee_type == "REP" ~ "REP",
+        committee_type == "DEM" ~ "DEM",
+        committee_type == "Company Pac" ~ "Company Pac",
+        committee_type == "ICI Pac" ~ "ICI Pac",
+        TRUE ~ "Other"
+      ),
+    Couple =
+      case_when(
+        CEO == "CEO" ~ name,
+        TRUE ~ spouse
+        ),
+    Order =
+      case_when(
+        committee_types == "REP" ~ 1,
+        committee_types == "DEM" ~ 2,
+        committee_types == "Company Pac" ~ 3,
+        committee_types == "ICI Pac" ~ 4,
+        committee_types == "Other" ~ 5
+      )) %>% 
+  
+  
+  
+  filter(
+    grepl("Hillary", committee_name, ignore.case = TRUE) |
+     grepl("Obama", committee_name, ignore.case = TRUE) |
+     grepl("Trump", committee_name, ignore.case = TRUE) |
+      grepl("Pence", committee_name, ignore.case = TRUE) |
+     grepl("Romney", committee_name, ignore.case = TRUE) |
+     grepl("McCain", committee_name, ignore.case = TRUE) |
+      grepl("Ryan", committee_name, ignore.case = TRUE) |
+       grepl("Biden", committee_name, ignore.case = TRUE) |
+       grepl("Kain", committee_name, ignore.case = TRUE) |
+       grepl("Palin", committee_name, ignore.case = TRUE)
+  )
+
+
+
+```

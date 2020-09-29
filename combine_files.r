@@ -109,6 +109,10 @@ david_butler <- READ("FEC/indiv_09082020/david_butler.csv") %>%
   mutate(name = "david butler",
          spouse = "chrissy butler")
 
+douglas_sieg <- READ("FEC/indiv_09082020/douglas_sieg.csv") %>% 
+  mutate(name = "douglas sieg",
+         spouse = "tracey sieg")
+
 elizabeth_norris <- READ("FEC/indiv_09082020/elizabeth_norris.csv") %>% 
   mutate(name = "elizabeth norris",
          spouse = "mortimer buckley")
@@ -141,10 +145,6 @@ mary_callahan_erdoes <- READ("FEC/indiv_09082020/mary_callahan_erdoes.csv") %>%
   mutate(name = "mary callahan erdoes",
          spouse = "philip erdoes")
 
-matt_oconnor <- READ("FEC/indiv_09082020/matt_oconnor.csv") %>% 
-  mutate(name = "matt oconnor",
-         spouse = "susan oconnor")
-
 michael_falcon <- READ("FEC/indiv_09082020/michael_falcon.csv") %>% 
   mutate(name = "michael falcon",
          spouse = "susan falcon")
@@ -152,7 +152,6 @@ michael_falcon <- READ("FEC/indiv_09082020/michael_falcon.csv") %>%
 michael_roberge <- READ("FEC/indiv_09082020/michael_roberge.csv") %>% 
   mutate(name = "michael roberge",
          spouse = "tracy roberge")
-
 
 mortimer_buckley <- READ("FEC/indiv_09082020/mortimer_buckley.csv") %>% 
   mutate(name = "mortimer buckley",
@@ -170,14 +169,13 @@ roger_ferguson <- READ("FEC/indiv_09082020/roger_ferguson.csv") %>%
   mutate(name = "roger ferguson",
          spouse = "annette nazareth")
 
-
-susan_oconnor <- READ("FEC/indiv_09082020/susan_oconnor.csv") %>% 
-  mutate(name = "susan oconnor",
-         spouse = "matthew oconnor")
-
 tim_armour <- READ("FEC/indiv_09082020/tim_armour.csv") %>% 
   mutate(name = "tim armour",
          spouse = "")
+
+tracey_sieg <- READ("FEC/indiv_09082020/tracey_sieg.csv") %>% 
+  mutate(name = "tracey sieg",
+         spouse = "douglas sieg")
 
 tracy_roberge <- READ("FEC/indiv_09082020/tracy_roberge.csv") %>% 
   mutate(name = "tracy roberge",
@@ -196,6 +194,7 @@ CEO_FEC_09082020 <- full_join(abigail_johnson, annette_nazareth) %>%
   full_join(., christopher_mckown) %>% 
   full_join(., dana_emery) %>% 
   full_join(., david_butler) %>% 
+  full_join(., douglas_sieg) %>% 
   full_join(., elizabeth_norris) %>% 
   full_join(., gerard_oreilly) %>% 
   full_join(., jennifer_flanagan) %>% 
@@ -204,15 +203,14 @@ CEO_FEC_09082020 <- full_join(abigail_johnson, annette_nazareth) %>%
   full_join(., laurence_fink) %>% 
   full_join(., martin_flanagan) %>% 
   full_join(., mary_callahan_erdoes) %>% 
-  full_join(., matt_oconnor) %>% 
   full_join(., michael_falcon) %>% 
   full_join(., michael_roberge) %>% 
   full_join(., mortimer_buckley) %>% 
   full_join(., philip_erdoes) %>% 
   full_join(., robert_emery) %>% 
   full_join(., roger_ferguson) %>% 
-  full_join(., susan_oconnor) %>% 
   full_join(., tim_armour) %>% 
+  full_join(., tracey_sieg) %>% 
   full_join(., tracy_roberge) %>% 
   full_join(., william_stromberg) %>% 
   full_join(., william_truscott)
